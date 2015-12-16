@@ -1,0 +1,9 @@
+ 2301  grep "18 f  =" *-freq/OUTCAR | awk '{print $9}' > 18.dat
+ 2311  grep "18 f  =" unroll-Br/*-freq/OUTCAR | awk '{print $9}' > 18-Br.dat
+ 2312  mv 18.dat 18-I.dat
+ 2314  cat > 18-Cl.dat
+ 2315  ls
+ 2317  mv histogram_18.gpt histogram_mode_18.dat
+ 2318  mkdir 2015-11-ANALYSIS
+ 2319  mv histogram_mode_18.dat 18-*.dat 2015-11-ANALYSIS/
+ 2320  cd 2015-11-ANALYSIS/

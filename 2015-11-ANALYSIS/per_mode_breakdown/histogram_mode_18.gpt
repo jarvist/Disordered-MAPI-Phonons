@@ -1,0 +1,77 @@
+# line styles for ColorBrewer Set1
+# for use with qualitative/categorical data
+# provides 8 easy-to-name colors
+# compatible with gnuplot >=4.2
+# author: Anna Schneider
+
+# line styles
+
+do for [i=0:33:8] {
+set style line i+1 lc rgb '#E41A1C' # red
+set style line i+2 lc rgb '#377EB8' # blue
+set style line i+3 lc rgb '#4DAF4A' # green
+set style line i+4 lc rgb '#984EA3' # purple
+set style line i+5 lc rgb '#FF7F00' # orange
+set style line i+6 lc rgb '#FFFF33' # yellow
+set style line i+7 lc rgb '#A65628' # brown
+set style line i+8 lc rgb '#F781BF' # pink
+}
+
+# palette
+set palette maxcolors 8
+set palette defined (\
+              0 '#E41A1C',\
+              1 '#377EB8',\
+              2 '#4DAF4A',\
+              3 '#984EA3',\
+              4 '#FF7F00',\
+              5 '#FFFF33',\
+              6 '#A65628',\
+              7 '#F781BF' )
+
+set style increment user
+
+# Overrides for halogens
+#set style line 1 lc rgb '#984EA3' # purple - Iodine
+#set style line 2 lc rgb '#E41A1C' # Red - Bromide
+#set style line 3 lc rgb '#4DAF4A' # Green  - Chloride
+
+# Aurel: Iodine - Grey, Bromide - Blue, Chloride - Purple
+# Colours by a screenshot of the Word Doc + then eye-dropper tool in Gimp (~:>
+set style line 1 lc rgb '#7e7e7e' # Grey - Iodine
+set style line 2 lc rgb '#021da2' # Blue - Bromide
+set style line 3 lc rgb '#ff3591' # Purple - Chloride
+
+#set style fill solid border 0.7
+set style fill transparent solid 0.5 border 0.7
+
+# See: http://stackoverflow.com/questions/2471884/histogram-using-gnuplot
+binwidth=10.0
+bin(x,width)=width*floor(x/width) + binwidth/2.0
+set boxwidth binwidth/3
+
+set xrange [0:600]
+
+set sample 1000
+# Find weight via : head -n 2 *_avg.dat
+# Br 1 3594.43 102
+# Cl 1 3198.67 83
+# I 1 3267.31 249
+plot 'I_18.dat'  using (bin($9,binwidth)):(1.0/249) smooth freq with boxes lt 1,\
+     'Br_18.dat' using (bin($9,binwidth)+binwidth/3):(1.0/96) smooth freq with boxes lt 2,\
+     'Cl_18.dat' using (bin($9,binwidth)+2*binwidth/3):(1.0/102)  smooth freq with boxes lt 3 ,\
+     'I_18.dat'  using 9:(25.0/249) smooth kdensity lt 1 lw 2,\
+     'Br_18.dat' using 9:(25.0/96) smooth kdensity lt 2 lw 2,\
+     'Cl_18.dat' using 9:(25.0/102)  smooth kdensity lt 3 lw 2
+
+file="MAPI_Br_Cl"
+suffix="-Mode18Twister"
+
+set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
+set output file.suffix.'.png'
+replot
+set terminal postscript eps enhanced color font 'Helvetica,18'
+set output file.suffix.'.eps'
+replot
+
+#plot 'I.dat' using 9:(1.0):2 with impulses linecolor variable

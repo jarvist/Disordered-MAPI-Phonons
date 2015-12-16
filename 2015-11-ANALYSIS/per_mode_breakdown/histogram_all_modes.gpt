@@ -1,0 +1,109 @@
+# line styles for ColorBrewer Set1
+# for use with qualitative/categorical data
+# provides 8 easy-to-name colors
+# compatible with gnuplot >=4.2
+# author: Anna Schneider
+
+# line styles
+
+do for [i=0:33:8] {
+set style line i+1 lc rgb '#E41A1C' # red
+set style line i+2 lc rgb '#377EB8' # blue
+set style line i+3 lc rgb '#4DAF4A' # green
+set style line i+4 lc rgb '#984EA3' # purple
+set style line i+5 lc rgb '#FF7F00' # orange
+set style line i+6 lc rgb '#FFFF33' # yellow
+set style line i+7 lc rgb '#A65628' # brown
+set style line i+8 lc rgb '#F781BF' # pink
+}
+
+# palette
+set palette maxcolors 8
+set palette defined (\
+              0 '#E41A1C',\
+              1 '#377EB8',\
+              2 '#4DAF4A',\
+              3 '#984EA3',\
+              4 '#FF7F00',\
+              5 '#FFFF33',\
+              6 '#A65628',\
+              7 '#F781BF' )
+
+set style increment user
+
+# Plotting styles
+
+set style fill solid border 0.7
+
+# See: http://stackoverflow.com/questions/2471884/histogram-using-gnuplot
+binwidth=5.0
+bin(x,width)=width*floor(x/width) + binwidth/2.0
+set boxwidth binwidth
+
+set samples 1000
+
+# Labels + etc.
+set xlabel "Frequency"
+set ylabel "PDF"
+
+#set style histogram rowstacked 
+#18-Br.dat  18-Cl.dat  18-I.dat 
+#plot 'I_1.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes
+#,\
+#     'Br.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes,\
+#     'Cl.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes
+
+#plot 'I.dat' using 9:(1.0):2 with impulses linecolor variable
+
+set xrange [0:3500]
+
+# I: 249, Br: 90, Cl: 77
+# 1.0/N is weighting for # datapoints
+#plot for [i=1:33] 'Br_'.i.'.dat' using (bin($9,binwidth)):(1.0/90) smooth freq with boxes lt i title 'Mode'.i,\
+# "Br_avg.dat" u 3:(0.0):(0.0):(0.25):2 with vectors lc var lw 1 title ''
+#for [i=1:33] 'Br_'.i.'.dat' using (bin($9,binwidth)):(-1.0/80) smooth freq with boxes lt i title '',\
+ #, "Br_avg.dat" u 3:(0.0):(0.0):(-0.25):2 w vectors lc var lw 1 title ''
+#plot for [i=1:33] 'Br_'.i.'.dat' using 9:1.0/90 smooth kdensity lt i title 'Mode'.i
+
+#MAPbBr.dat  MAPbCl.dat  MAPbI.dat
+# Would be nice to loop over these, but I'm not sure how...
+
+suffix="_StochasticDisorder"
+
+file="MAPbI"
+
+set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
+set output file.suffix.'.png'
+
+plot for [i=1:33] 'I_'.i.'.dat' using 9:(1.0/248) smooth kdensity lt i lw 2 title 'Mode'.i, \
+     '../I.dat' using 9:(1.0/248):(10) smooth kdensity lt i lc rgb "#7e7e7e" lw 2 title 'Overall'
+
+set terminal postscript eps enhanced color font 'Helvetica,18'
+set output file.suffix.'.eps'
+replot
+
+file="MAPbBr"
+
+set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
+set output file.suffix.'.png'
+
+plot for [i=1:33] 'Br_'.i.'.dat' using 9:(1.0/102) smooth kdensity lt i lw 2 title 'Mode'.i, \
+     '../Br.dat' using 9:(1.0/102):(10) smooth kdensity lt i lc rgb "#021da2" lw 2 title 'Overall'
+
+set terminal postscript eps enhanced color font 'Helvetica,18'
+set output file.suffix.'.eps'
+replot
+
+file="MAPbCl"
+
+set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
+set output file.suffix.'.png'
+
+plot for [i=1:33] 'Cl_'.i.'.dat' using 9:(1.0/102) smooth kdensity lt i lw 2 title 'Mode'.i, \
+     '../Cl.dat' using 9:(1.0/102):(10) smooth kdensity lt i lc rgb "#ff3591" lw 2 title 'Overall'
+
+set terminal postscript eps enhanced color font 'Helvetica,18'
+set output file.suffix.'.eps'
+replot
+
+
