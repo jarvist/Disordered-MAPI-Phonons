@@ -35,12 +35,19 @@ set style increment user
 
 set style fill solid border 0.7
 
-# See: http://stackoverflow.com/questions/2471884/histogram-using-gnuplot
+set xrange [200:3500]
 binwidth=5.0
-bin(x,width)=width*floor(x/width) + binwidth/2.0
+#set xrange [0:200]
+#binwidth=1.0
+
+# See: http://stackoverflow.com/questions/2471884/histogram-using-gnuplot
+bin(x,width)=width*floor(x/width) + width/2.0
+
 set boxwidth binwidth
 
 set samples 1000
+
+unset key
 
 # Labels + etc.
 set xlabel "Frequency"
@@ -54,8 +61,6 @@ set ylabel "PDF"
 #     'Cl.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes
 
 #plot 'I.dat' using 9:(1.0):2 with impulses linecolor variable
-
-set xrange [0:3500]
 
 # I: 249, Br: 90, Cl: 77
 # 1.0/N is weighting for # datapoints
@@ -76,7 +81,16 @@ set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
 set output file.suffix.'.png'
 
 plot for [i=1:33] 'I_'.i.'.dat' using 9:(1.0/248) smooth kdensity lt i lw 2 title 'Mode'.i, \
-     '../I.dat' using 9:(1.0/248):(10) smooth kdensity lt i lc rgb "#7e7e7e" lw 2 title 'Overall'
+     '../I_sorted.dat' using (bin($9,binwidth)):(0.2/248) smooth freq with lines lc rgb "#7e7e7e" lw 2.0
+
+#     '../I.dat' using 9:(1.0/248):(10.0) smooth kdensity lt i lc rgb "#7e7e7e" lw 2 title 'Overall'
+
+#set style data histogram
+#set style histogram columnstacked
+
+#plot for [i=1:33] 'I_'.i.'.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes , \
+
+#plot '../I.dat' using (bin($9,binwidth)):(1.0) smooth freq with lp lc rgb "#7e7e7e" lw 2
 
 set terminal postscript eps enhanced color font 'Helvetica,18'
 set output file.suffix.'.eps'
@@ -87,8 +101,9 @@ file="MAPbBr"
 set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
 set output file.suffix.'.png'
 
-plot for [i=1:33] 'Br_'.i.'.dat' using 9:(1.0/102) smooth kdensity lt i lw 2 title 'Mode'.i, \
-     '../Br.dat' using 9:(1.0/102):(10) smooth kdensity lt i lc rgb "#021da2" lw 2 title 'Overall'
+plot for [i=1:33] 'Br-RETRY_'.i.'.dat' using 9:(1.0/362) smooth kdensity lt i lw 2 title 'Mode'.i, \
+    '../Br-RETRY.dat' using (bin($9,binwidth)):(0.2/362) smooth freq with lines lc rgb "#021da5" lw 2
+#     '../Br-RETRY.dat' using 9:(1.0/362):(10) smooth kdensity lt i lc rgb "#021da2" lw 2 title 'Overall'
 
 set terminal postscript eps enhanced color font 'Helvetica,18'
 set output file.suffix.'.eps'
@@ -100,10 +115,24 @@ set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
 set output file.suffix.'.png'
 
 plot for [i=1:33] 'Cl_'.i.'.dat' using 9:(1.0/102) smooth kdensity lt i lw 2 title 'Mode'.i, \
-     '../Cl.dat' using 9:(1.0/102):(10) smooth kdensity lt i lc rgb "#ff3591" lw 2 title 'Overall'
+      '../Cl.dat' using (bin($9,binwidth)):(0.2/102) smooth freq with lines lc rgb "#ff3591" lw 2
+#     '../Cl.dat' using 9:(1.0/102):(10) smooth kdensity lt i lc rgb "#ff3591" lw 2 title 'Overall'
 
 set terminal postscript eps enhanced color font 'Helvetica,18'
 set output file.suffix.'.eps'
 replot
 
+file="MAPb_I_Br_Cl"
+
+set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
+set output file.suffix.'.png'
+
+
+plot  '../I_sorted.dat' using (bin($9,binwidth)):(1.0/248) smooth freq with lines lc rgb "#7e7e7e" lw 2.0, \
+      '../Br-RETRY.dat' using (bin($9,binwidth)):(1.0/362) smooth freq with lines lc rgb "#021da5" lw 2.0, \
+            '../Cl.dat' using (bin($9,binwidth)):(1.0/102) smooth freq with lines lc rgb "#ff3591" lw 2.0
+
+set terminal postscript eps enhanced color font 'Helvetica,18'
+set output file.suffix.'.eps'
+replot
 

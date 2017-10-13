@@ -36,6 +36,9 @@ plot 'I.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes,\
      'Br.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes,\
      'Cl.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes
 
+plot 'Br-RETRY.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes,\
+     'Br.dat' using (bin($9,binwidth)):(1.0) smooth freq with boxes,\
+ 
 #plot 'I.dat' using 9:(1.0):2 with impulses linecolor variable 
 
 #set samples 10000 #used for points in smooth function

@@ -1,7 +1,7 @@
 # Code to strip out the Frequencies from a VASP Phonon calculation, and do stats on the modes (average, count and Standard Deviation)
 # I wrote the code to do the stats, so it may be wrong :^) -- Jarv
 
-for HALOGEN in MAPI MAPBr  MAPCl  
+for HALOGEN in MAPI MAPBr MAPBr-RETRY MAPCl  
 do
     for mode in ` seq 33 `
     do

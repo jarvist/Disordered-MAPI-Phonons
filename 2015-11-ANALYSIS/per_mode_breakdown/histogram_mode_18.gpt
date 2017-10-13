@@ -51,18 +51,25 @@ bin(x,width)=width*floor(x/width) + binwidth/2.0
 set boxwidth binwidth/3
 
 set xrange [0:600]
+set yrange [0:0.2] # I don't know why it can't guess this...
+
+set xlabel "Wavelength (cm^-1)"
+set ylabel "Probability Density"
 
 set sample 1000
-# Find weight via : head -n 2 *_avg.dat
-# Br 1 3594.43 102
-# Cl 1 3198.67 83
-# I 1 3267.31 249
-plot 'I_18.dat'  using (bin($9,binwidth)):(1.0/249) smooth freq with boxes lt 1,\
-     'Br_18.dat' using (bin($9,binwidth)+binwidth/3):(1.0/96) smooth freq with boxes lt 2,\
+# Find weight via :> wc *_18.dat
+#    97  1164 10282 Br_18.dat
+#    362  4344 40544 Br-RETRY_18.dat
+#    102  1224 10812 Cl_18.dat
+#    248  2976 26040 I_18.dat
+plot 'I_18.dat'  using (bin($9,binwidth)):(1.0/248) smooth freq with boxes lt 1,\
+     'Br-RETRY_18.dat' using (bin($9,binwidth)+binwidth/3):(1.0/362) smooth freq with boxes lt 2,\
      'Cl_18.dat' using (bin($9,binwidth)+2*binwidth/3):(1.0/102)  smooth freq with boxes lt 3 ,\
-     'I_18.dat'  using 9:(25.0/249) smooth kdensity lt 1 lw 2,\
-     'Br_18.dat' using 9:(25.0/96) smooth kdensity lt 2 lw 2,\
+     'I_18.dat'  using 9:(25.0/248) smooth kdensity lt 1 lw 2,\
+     'Br-RETRY_18.dat' using 9:(25.0/362) smooth kdensity lt 2 lw 2,\
      'Cl_18.dat' using 9:(25.0/102)  smooth kdensity lt 3 lw 2
+
+unset key
 
 file="MAPI_Br_Cl"
 suffix="-Mode18Twister"
@@ -73,5 +80,22 @@ replot
 set terminal postscript eps enhanced color font 'Helvetica,18'
 set output file.suffix.'.eps'
 replot
+
+file="MAPI"
+suffix="-Mode18Twister"
+set terminal pngcairo size 1365,1024 enhanced font 'Helvetica,18'
+set output file.suffix.'.png'
+
+set boxwidth 0.8*binwidth # now we're just plotting 1 component
+set yrange [0:0.1] # I don't know why it can't guess this...
+
+plot 'I_18.dat'  using (bin($9,binwidth)):(1.0/248) smooth freq with boxes lt 1,\
+     'I_18.dat'  using 9:(12.0/248) smooth kdensity lt 1 lw 2
+
+set terminal postscript eps enhanced color font 'Helvetica,18'
+set output file.suffix.'.eps'
+replot
+
+
 
 #plot 'I.dat' using 9:(1.0):2 with impulses linecolor variable

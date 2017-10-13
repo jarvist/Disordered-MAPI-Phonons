@@ -1,4 +1,4 @@
-for a in I Br Cl
+for a in I Br Br-RETRY Cl
 do
 echo "Averaging phonon modes for ${a}..."
 echo "" > "${a}_avg.dat"
