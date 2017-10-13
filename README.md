@@ -9,8 +9,10 @@ A work / dataset in progress.
 
 # Raman / disordered phonon study
 
-As used in https://doi.org/10.1039%2Fc6cp03474h . The repeat of the Br data is
-due to using a non well-optimised input (taken from another's project). 
+As used in https://doi.org/10.1039%2Fc6cp03474h . (Figure 7, Figure S9, Figure S10, Figure S11, Note S2.)
+
+The repeat of the Br data is due to using a non well-optimised input (taken
+from another's project). 
 
 # Thermodynamically sampled athermal structures
 
